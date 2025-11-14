@@ -20,7 +20,6 @@ public class VehicleInfo {
         }
     }
 
-
     public static void outputVehicle(Vehicle v, OutputStream out) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
 
@@ -29,7 +28,7 @@ public class VehicleInfo {
         dos.writeInt(classBytes.length);
         dos.write(classBytes);
 
-        String make = v.getMake();
+        String make = v.getMark();
         byte[] makeBytes = make.getBytes(StandardCharsets.UTF_8);
         dos.writeInt(makeBytes.length);
         dos.write(makeBytes);
@@ -45,14 +44,10 @@ public class VehicleInfo {
             dos.writeDouble(prices[i]);
         }
         dos.flush();
-
     }
-
     public static Vehicle inputVehicle(InputStream in) throws IOException {
         DataInputStream dis = new DataInputStream(in);
-
         try {
-
             int classNameLength = dis.readInt();
             byte[] classNameBytes = new byte[classNameLength];
             dis.readFully(classNameBytes);
@@ -67,11 +62,11 @@ public class VehicleInfo {
 
             Vehicle vehicle;
             switch (className) {
-                case "Car":
-                    vehicle = new Car(make, 0);
+                case "Auto":
+                    vehicle = new Auto(make, 0);
                     break;
                 case "Bike":
-                    vehicle = new Bike(make, 0);
+                    vehicle = new Motorbike(make, 0);
                     break;
                 default:
                     throw new IOException("Неизвестный класс: " + className);
@@ -86,7 +81,6 @@ public class VehicleInfo {
 
                 vehicle.addModel(price, modelName);
             }
-
             return vehicle;
 
         } catch (DuplicateModelNameException e) {
@@ -97,7 +91,7 @@ public class VehicleInfo {
     public static void writeVehicle(Vehicle vehicle, Writer out) {
         PrintWriter writer = new PrintWriter(out);
         writer.println(vehicle.getClass().getSimpleName());
-        writer.println(vehicle.getMake());
+        writer.println(vehicle.getMark());
         writer.println(vehicle.getModelsLength());
 
         String[] models = vehicle.getNamesOfModels();
@@ -112,7 +106,6 @@ public class VehicleInfo {
 
     public static Vehicle readVehicle(Reader in) throws IOException {
         BufferedReader reader = new BufferedReader(in);
-
         try {
             String className = reader.readLine();
             String make = reader.readLine();
@@ -121,15 +114,14 @@ public class VehicleInfo {
             Vehicle vehicle;
             switch (className) {
                 case "Car":
-                    vehicle = new Car(make, 0);
+                    vehicle = new Auto(make, 0);
                     break;
                 case "Bike":
-                    vehicle = new Bike(make, 0);
+                    vehicle = new Motorbike(make, 0);
                     break;
                 default:
                     throw new IOException("Неизвестный класс: " + className);
             }
-
             for (int i = 0; i < modelCount; i++) {
                 String modelName = reader.readLine();
                 String priceStr = reader.readLine();
@@ -142,12 +134,11 @@ public class VehicleInfo {
                 vehicle.addModel(price, modelName);
             }
             return vehicle;
-
-        } catch (
-                DuplicateModelNameException e) {
+        }
+        catch (DuplicateModelNameException e) {
             throw new IOException("Ошибка при чтении: дублирование имени модели", e);
-        } catch (
-                NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             throw new IOException("Ошибка формата числа", e);
         }
     }

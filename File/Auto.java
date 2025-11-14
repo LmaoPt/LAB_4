@@ -2,14 +2,14 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Car implements Vehicle {
+public class Auto implements Vehicle {
     private static final long serialVersionUID = 1L;
 
-    private String make;
+    private String mark;
     private Model[] models;
 
-    public Car(String make, int length) {
-        this.make = make;
+    public Auto(String mark_, int length) {
+        this.mark = mark_;
         this.models = new Model[0];
 
         if (length > 0) {
@@ -23,28 +23,26 @@ public class Car implements Vehicle {
             }
         }
     }
-
-
-    public String getMake() {
-        return make;
+    public String getMark() {
+        return mark;
     }
-
-    public void setMake(String carmake) {
-        this.make = carmake;
+    public void setMark(String carmake) {
+        this.mark = carmake;
     }
+    public int getModelsLength() {return models.length;}
 
     public String[] getNamesOfModels() {
         String[] modelnames = new String[models.length];
         for (int i = 0; i < models.length; i++) {
-            modelnames[i] = models[i].modelname;
+            modelnames[i] = models[i].name;
         }
         return modelnames;
     }
 
     public double getPriceOfModelName(String modelname) throws NoSuchModelNameException {
         for (int i = 0; i < models.length; i++) {
-            if (modelname.equals(models[i].modelname)) {
-                return models[i].modelprice;
+            if (modelname.equals(models[i].name)) {
+                return models[i].price;
             }
         }
         throw new NoSuchModelNameException(modelname);
@@ -55,8 +53,8 @@ public class Car implements Vehicle {
             throw new ModelPriceOutOfBoundsException("Цена должна быть больше 0!");
         }
         for (int i = 0; i < models.length; i++) {
-            if (modelname.equals(models[i].modelname)) {
-                models[i].modelprice = modelprice;
+            if (modelname.equals(models[i].name)) {
+                models[i].price = modelprice;
                 return;
             }
         }
@@ -66,7 +64,7 @@ public class Car implements Vehicle {
     public double[] getPrices() {
         double[] modelprices = new double[models.length];
         for (int i = 0; i < models.length; i++) {
-            modelprices[i] = models[i].modelprice;
+            modelprices[i] = models[i].price;
         }
         return modelprices;
     }
@@ -76,7 +74,7 @@ public class Car implements Vehicle {
             throw new ModelPriceOutOfBoundsException("Цена должна быть больше 0!");
         }
         for (int i = 0; i < this.models.length; i++) {
-            if (name.equals(models[i].modelname)) {
+            if (name.equals(models[i].name)) {
                 throw new DuplicateModelNameException(name);
             }
         }
@@ -87,7 +85,7 @@ public class Car implements Vehicle {
     public void deleteModel(String name) throws NoSuchModelNameException {
         int index = -1;
         for (int i = 0; i < models.length; i++) {
-            if (name.equals(models[i].modelname)) {
+            if (name.equals(models[i].name)) {
                 index = i;
                 break;
             }
@@ -100,22 +98,18 @@ public class Car implements Vehicle {
         }
     }
 
-    public int getModelsLength() {
-        return models.length;
-    }
-
     public void setModelName(String oldmodelname, String newmodelname) throws NoSuchModelNameException, DuplicateModelNameException {
         int index = -1;
         for (int i = 0; i < models.length; i++) {
-            if (oldmodelname.equals(models[i].modelname)) {
+            if (oldmodelname.equals(models[i].name)) {
                 index = i;
             }
-            if (newmodelname.equals(models[i].modelname)) {
+            if (newmodelname.equals(models[i].name)) {
                 throw new DuplicateModelNameException(newmodelname);
             }
         }
         if (index != -1) {
-            models[index].modelname = newmodelname;
+            models[index].name = newmodelname;
         } else {
             throw new NoSuchModelNameException(oldmodelname);
         }
@@ -123,12 +117,12 @@ public class Car implements Vehicle {
 
     private class Model implements Serializable {
         private static final long serialVersionUID = 1L;
-        private String modelname;
-        private double modelprice;
+        private String name;
+        private double price;
 
-        public Model(String modelname, double modelprice) {
-            this.modelname = modelname;
-            this.modelprice = modelprice;
+        public Model(String name_, double price_) {
+            this.name = name_;
+            this.price = price_;
         }
     }
 }

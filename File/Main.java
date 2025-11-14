@@ -3,7 +3,7 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) {
         try {
-            Vehicle car = new Car("Toyota", 5);
+            Vehicle car = new Auto("Toyota", 5);
 
             car.addModel(15000, "Corolla");
             car.addModel(25000, "Camry");

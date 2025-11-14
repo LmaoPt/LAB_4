@@ -1,30 +1,33 @@
 import java.io.Serializable;
 
-public class Bike implements Vehicle{
+public class Motorbike implements Vehicle{
     private static final long serialVersionUID = 1L;
 
-    private String make;
+    private String mark;
     private int size = 0;
     private Model head;
+
     private transient long lastModified;
     {
         lastModified = System.currentTimeMillis();
     }
 
-    public Bike(String make, int size) {
+    public Motorbike(String mark, int size) {
         this.head = new Model();
         this.head.next = head;
         this.head.prev = head;
         this.size = 0;
-        this.make = make;
+        this.mark = mark;
     }
 
-    public void setMake(String make) {
-        this.make = make;
+    public void setMark(String make) {
+        this.mark = make;
     }
-
-    public String getMake() {
-        return this.make;
+    public String getMark() {
+        return this.mark;
+    }
+    public int getModelsLength() {
+        return size;
     }
 
     public String[] getNamesOfModels() {
@@ -32,7 +35,7 @@ public class Bike implements Vehicle{
         int i = 0;
         Model p = head.next;
         while (p != head) {
-            names[i] = p.modelname;
+            names[i] = p.name;
             p = p.next;
             i++;
         }
@@ -44,10 +47,10 @@ public class Bike implements Vehicle{
         Model f = null;
         if (!oldModelName.equals(newModelName)) {
             while (p != head) {
-                if (p.modelname.equals(oldModelName)) {
+                if (p.name.equals(oldModelName)) {
                     f = p;
                 }
-                if (p.modelname.equals(newModelName)) {
+                if (p.name.equals(newModelName)) {
                     throw new DuplicateModelNameException(newModelName);
                 }
                 p = p.next;
@@ -55,7 +58,7 @@ public class Bike implements Vehicle{
             if (f == null) {
                 throw new NoSuchModelNameException(oldModelName);
             } else {
-                f.modelname = newModelName;
+                f.name = newModelName;
             }
             lastModified = System.currentTimeMillis();
         }
@@ -64,7 +67,7 @@ public class Bike implements Vehicle{
     public double getPriceOfModelName(String name) throws NoSuchModelNameException {
         Model p = head.next;
         while (p != head) {
-            if (name.equals(p.modelname)) {
+            if (name.equals(p.name)) {
                 return p.price;
             }
             p = p.next;
@@ -78,7 +81,7 @@ public class Bike implements Vehicle{
         }
         Model p = head.next;
         while (p != head) {
-            if (name.equals(p.modelname)) {
+            if (name.equals(p.name)) {
                 p.price = price;
                 lastModified = System.currentTimeMillis();
                 return;
@@ -100,10 +103,6 @@ public class Bike implements Vehicle{
         return prices;
     }
 
-    public int getModelsLength() {
-        return size;
-    }
-
     public void addModel(double price, String name) throws DuplicateModelNameException {
         if (price <= 0) {
             throw new ModelPriceOutOfBoundsException("Цена должна быть больше 0!");
@@ -111,7 +110,7 @@ public class Bike implements Vehicle{
         Model p = head.next;
         Model w = new Model(name, price);
         while (p != head) {
-            if (p.modelname.equals(name)) {
+            if (p.name.equals(name)) {
                 throw new DuplicateModelNameException(name);
             }
             p = p.next;
@@ -127,7 +126,7 @@ public class Bike implements Vehicle{
     public void deleteModel(String name) throws NoSuchModelNameException {
         Model p = head.next;
         while (p != head) {
-            if (name.equals(p.modelname)) {
+            if (name.equals(p.name)) {
                 p.prev.next = p.next;
                 p.next.prev = p.prev;
                 size--;
@@ -141,16 +140,14 @@ public class Bike implements Vehicle{
 
     private class Model implements Serializable {
         private static final long serialVersionUID = 1L;
-        String modelname = null;
+        String name = null;
         double price = Double.NaN;
         Model prev = null;
         Model next = null;
 
-        public Model() {
-        }
-
+        public Model() {}
         public Model(String modelname, double price) {
-            this.modelname = modelname;
+            this.name = modelname;
             this.price = price;
         }
     }

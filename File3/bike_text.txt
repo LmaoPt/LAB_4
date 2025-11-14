@@ -1,4 +1,4 @@
-Car
+Auto
 Toyota
 7
 Model 1
