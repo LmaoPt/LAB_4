@@ -4,7 +4,7 @@ public class Motorbike implements Vehicle{
     private static final long serialVersionUID = 1L;
 
     private String mark;
-    private int size = 0;
+    private int size;
     private Model head;
 
     private transient long lastModified;
@@ -12,12 +12,22 @@ public class Motorbike implements Vehicle{
         lastModified = System.currentTimeMillis();
     }
 
-    public Motorbike(String mark, int size) {
+    public Motorbike(String mark, int size_)  {
         this.head = new Model();
         this.head.next = head;
         this.head.prev = head;
-        this.size = 0;
         this.mark = mark;
+        this.size = 0;
+
+        if(size_ > 0){
+            try {
+                for (int i = 0; i < size_; i++) {
+                    addModel((i + 1) * 100000, "Model " + (i + 1));
+                }
+            } catch (DuplicateModelNameException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setMark(String make) {
@@ -136,6 +146,21 @@ public class Motorbike implements Vehicle{
             p = p.next;
         }
         throw new NoSuchModelNameException(name);
+    }
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+
+        String mark = getMark();
+        int countModel = getModelsLength();
+        String[] models = getNamesOfModels();
+        double[] prices = getPrices();
+
+        buffer.append("Марка машины: " + mark + " Количество: " + countModel + "\n");
+        for(int i = 0; i < countModel; i++){
+            buffer.append((i + 1) + ") " + "Название: " + models[i] + " Цена: " + prices[i] +"\n");
+        }
+        return buffer.toString();
     }
 
     private class Model implements Serializable {

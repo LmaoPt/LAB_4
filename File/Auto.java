@@ -14,9 +14,8 @@ public class Auto implements Vehicle {
 
         if (length > 0) {
             try {
-                Random r = new Random();
                 for (int i = 0; i < length; i++) {
-                    this.addModel(r.nextDouble(1000000), "Model " + (i + 1));
+                    addModel((i + 1) * 100000, "Model " + (i + 1));
                 }
             } catch (DuplicateModelNameException e) {
                 e.printStackTrace();
@@ -113,6 +112,35 @@ public class Auto implements Vehicle {
         } else {
             throw new NoSuchModelNameException(oldmodelname);
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+
+        String mark = getMark();
+        int countModel = getModelsLength();
+        String[] models = getNamesOfModels();
+        double[] prices = getPrices();
+
+        buffer.append("Марка машины: " + mark + " Количество: " + countModel + "\n");
+        for(int i = 0; i < countModel; i++){
+            buffer.append((i + 1) + ") " + "Название: " + models[i] + " Цена: " + prices[i] +"\n");
+        }
+        return buffer.toString();
+    }
+    @Override
+    public boolean equals(Vehicle vehicle){
+        /*
+        1) ссылка на себя же - true.
+        2) объект не является транспортным средством - false
+        3) объект не имеет такую же марку - false
+        4) если либо модели нет - пропуск, или одной модели нет - false.
+        5) объекты не имееют точно такие же модели - false и список моделей - false, думаю что кол-во тоже сравнить - false
+        6) цены не совпадают - false
+        Иначе true
+
+         */
     }
 
     private class Model implements Serializable {

@@ -3,13 +3,14 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) {
         try {
-            Vehicle car = new Auto("Toyota", 5);
+            Vehicle auto = new Motorbike("Toyota", 19);
 
-            car.addModel(15000, "Corolla");
-            car.addModel(25000, "Camry");
+            auto.addModel(1532300, "Audi");
+            auto.addModel(2533000, "BMW");
+            System.out.println(auto.toString());
 
 
-            System.out.println("\n=== ИСХОДНЫЕ ДАННЫЕ ===");
+            /*System.out.println("\n=== ИСХОДНЫЕ ДАННЫЕ ===");
             System.out.println("Автомобиль:");
             VehicleInfo.print(car);
 
@@ -61,7 +62,7 @@ public class Main {
             System.out.println("Количество моделей: " + carDeserialized.getModelsLength());*/
 
             // =================== ТЕСТ С System.in / System.out ===================
-            System.out.println("\n=== ТЕСТ С СИСТЕМНЫМИ ПОТОКАМИ ===");// дописать тест системных потоков
+            /*System.out.println("\n=== ТЕСТ С СИСТЕМНЫМИ ПОТОКАМИ ===");// дописать тест системных потоков
 
 
             System.out.println("Тест System.out");
@@ -73,6 +74,7 @@ public class Main {
             Vehicle test = VehicleInfo.readVehicle(new InputStreamReader(System.in));
             VehicleInfo.writeVehicle(test, new OutputStreamWriter(System.out));
 
+            */
 
             /*
             Car
@@ -84,10 +86,12 @@ public class Main {
             25000.0
             */
 
+
         } catch (Exception e) {
             System.err.println("Ошибка: " + e.getMessage());
             e.printStackTrace();
         }
+
 
     }
 }
