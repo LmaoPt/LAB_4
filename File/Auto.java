@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 public class Auto implements Vehicle {
@@ -114,7 +115,6 @@ public class Auto implements Vehicle {
         }
     }
 
-    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
 
@@ -123,24 +123,35 @@ public class Auto implements Vehicle {
         String[] models = getNamesOfModels();
         double[] prices = getPrices();
 
-        buffer.append("Марка машины: " + mark + " Количество: " + countModel + "\n");
+        buffer.append("Марка машин: " + mark + " Количество: " + countModel);
         for(int i = 0; i < countModel; i++){
-            buffer.append((i + 1) + ") " + "Название: " + models[i] + " Цена: " + prices[i] +"\n");
+            buffer.append("\n"+(i + 1) + ") " + "Название: " + models[i] + " Цена: " + prices[i]);
         }
         return buffer.toString();
     }
     @Override
-    public boolean equals(Vehicle vehicle){
-        /*
-        1) ссылка на себя же - true.
-        2) объект не является транспортным средством - false
-        3) объект не имеет такую же марку - false
-        4) если либо модели нет - пропуск, или одной модели нет - false.
-        5) объекты не имееют точно такие же модели - false и список моделей - false, думаю что кол-во тоже сравнить - false
-        6) цены не совпадают - false
-        Иначе true
+    public boolean equals(Object obj){
+        if(this == obj){ return true;}
+        else if(!(obj instanceof Vehicle)){return false;}
+        else{
+            Auto auto = (Auto) obj;
+            if(!(Objects.equals(this.getMark(), auto.getMark()))){return false;}
+            if(!(Objects.equals(this.getModelsLength(), auto.getModelsLength()))){return false;}
 
-         */
+            String[] name = auto.getNamesOfModels();
+            double[] prices = auto.getPrices();
+            for(int i = 0; i < name.length; i++) {
+                if (!Objects.equals(this.models[i].getName(), name[i])) {return false;}
+                if (!Objects.equals(this.models[i].getPrice(), prices[i])) {return false;}
+            }
+            return true;
+        }
+    }
+    @Override
+    public int hashCode(){
+        int result = mark.hashCode();
+        result = result * 31 + Arrays.hashCode(models);
+        return result;
     }
 
     private class Model implements Serializable {
@@ -152,5 +163,9 @@ public class Auto implements Vehicle {
             this.name = name_;
             this.price = price_;
         }
+        public String getName(){return name;}
+        public void setName(String nname){name = nname;}
+        public double getPrice(){return price;}
+        public void setPrice(double pprice){price = pprice;}
     }
 }

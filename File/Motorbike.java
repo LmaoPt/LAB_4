@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Motorbike implements Vehicle{
     private static final long serialVersionUID = 1L;
@@ -156,13 +158,44 @@ public class Motorbike implements Vehicle{
         String[] models = getNamesOfModels();
         double[] prices = getPrices();
 
-        buffer.append("Марка машины: " + mark + " Количество: " + countModel + "\n");
+        buffer.append("Марка машин: " + mark + " Количество: " + countModel);
         for(int i = 0; i < countModel; i++){
-            buffer.append((i + 1) + ") " + "Название: " + models[i] + " Цена: " + prices[i] +"\n");
+            buffer.append("\n"+(i + 1) + ") " + "Название: " + models[i] + " Цена: " + prices[i]);
         }
         return buffer.toString();
     }
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){ return true;}
+        else if(!(obj instanceof Vehicle)){return false;}
+        else{
+            Motorbike motorbike = (Motorbike) obj;
+            if(!(Objects.equals(this.getMark(), motorbike.getMark()))){return false;}
+            if(!(Objects.equals(this.getModelsLength(), motorbike.getModelsLength()))){return false;}
 
+            String[] name = motorbike.getNamesOfModels();
+            double[] prices = motorbike.getPrices();
+
+            String[] thisName = this.getNamesOfModels();
+            double[] thisPrice = this.getPrices();
+
+            for(int i = 0; i < thisName.length; i++) {
+                if (!Objects.equals(thisName[i], name[i])) {return false;}
+                if (!Objects.equals(thisPrice[i], prices[i])) {return false;}
+            }
+            return true;
+        }
+    }
+    @Override
+    public int hashCode(){
+        int result = mark.hashCode();
+        Model current = head;
+        while(current != head ){
+            result = result * 31 + current.hashCode();
+            current = current.next;
+        }
+        return result;
+    }
     private class Model implements Serializable {
         private static final long serialVersionUID = 1L;
         String name = null;

@@ -3,11 +3,21 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) {
         try {
-            Vehicle auto = new Motorbike("Toyota", 19);
-
+            Vehicle auto = new Motorbike("Toyota", 2);
             auto.addModel(1532300, "Audi");
             auto.addModel(2533000, "BMW");
-            System.out.println(auto.toString());
+
+            Vehicle auto1 = new Motorbike("Toyota", 2);
+            auto1.addModel(1532300, "Audi");
+            auto1.addModel(2533000, "BMW");
+
+
+            //System.out.println(auto.toString());
+            System.out.println(auto.equals(auto1));
+            System.out.println(auto1.equals(auto));
+            System.out.println(auto.hashCode());
+            System.out.println(auto1.hashCode());
+
 
 
             /*System.out.println("\n=== ИСХОДНЫЕ ДАННЫЕ ===");
