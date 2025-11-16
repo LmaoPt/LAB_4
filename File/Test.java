@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-class Student{
+class Student implements Cloneable{
     public String name = "Vlad";
     public int age = 19;
     public Student(){}
@@ -21,8 +21,11 @@ class Student{
             return false;
         }
         Student student = (Student) obj; // Приведения типов, потому что equals должен принимать любой тип
-
         return age == student.age && Objects.equals(name, student.name);
+    }
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
     }
 }
 

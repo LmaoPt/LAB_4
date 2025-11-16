@@ -1,9 +1,10 @@
+import java.io.Closeable;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-public class Auto implements Vehicle {
+public class Auto implements Vehicle, Cloneable {
     private static final long serialVersionUID = 1L;
 
     private String mark;
@@ -16,7 +17,7 @@ public class Auto implements Vehicle {
         if (length > 0) {
             try {
                 for (int i = 0; i < length; i++) {
-                    addModel((i + 1) * 100000, "Model " + (i + 1));
+                    addModel("Model " + (i + 1), (i + 1) * 100000);
                 }
             } catch (DuplicateModelNameException e) {
                 e.printStackTrace();
@@ -69,7 +70,7 @@ public class Auto implements Vehicle {
         return modelprices;
     }
 
-    public void addModel(double price, String name) throws DuplicateModelNameException {
+    public void addModel(String name, double price) throws DuplicateModelNameException {
         if (price <= 0) {
             throw new ModelPriceOutOfBoundsException("Цена должна быть больше 0!");
         }
@@ -153,8 +154,18 @@ public class Auto implements Vehicle {
         result = result * 31 + Arrays.hashCode(models);
         return result;
     }
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        Auto autoClone = (Auto) super.clone();
+        autoClone.models = new Model[this.models.length];
+        for(int i = 0; i < this.models.length; i++){
+            Model model = this.models[i];
+            autoClone.models[i] = new Model(model.getName(), model.getPrice());
+        }
+        return autoClone;
+    }
 
-    private class Model implements Serializable {
+    private class Model implements Serializable, Cloneable {
         private static final long serialVersionUID = 1L;
         private String name;
         private double price;
@@ -168,4 +179,5 @@ public class Auto implements Vehicle {
         public double getPrice(){return price;}
         public void setPrice(double pprice){price = pprice;}
     }
+
 }

@@ -3,20 +3,39 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) {
         try {
-            Vehicle auto = new Motorbike("Toyota", 2);
-            auto.addModel(1532300, "Audi");
-            auto.addModel(2533000, "BMW");
+            Vehicle motorbike = new Motorbike("Audi", 0);
+            motorbike.addModel( "123",1532300);
+            motorbike.addModel("S12",2533000);
 
-            Vehicle auto1 = new Motorbike("Toyota", 2);
-            auto1.addModel(1532300, "Audi");
-            auto1.addModel(2533000, "BMW");
+            Vehicle motorbike1 = new Motorbike("Audi", 2);
+            motorbike1.addModel( "123",1532300);
+            motorbike1.addModel("S12",2533000);
+
+            Vehicle auto = new Auto("Mercedes", 2);
+            auto.addModel("Turbo-S", 1532300);
+            auto.addModel("B12", 2533000);
+
+            System.out.println(motorbike.toString());
+            System.out.println(auto.toString());
+            System.out.println("Значения равны? " + motorbike.equals(motorbike1));
+            System.out.println("Хеш-код: " + motorbike.hashCode());
+            System.out.println("Хеш-код: " + motorbike1.hashCode());
 
 
-            //System.out.println(auto.toString());
-            System.out.println(auto.equals(auto1));
-            System.out.println(auto1.equals(auto));
-            System.out.println(auto.hashCode());
-            System.out.println(auto1.hashCode());
+            Vehicle motorbike3 = new Motorbike("Audi", 0);
+            motorbike3.addModel( "12",1532300);
+            motorbike3.addModel( "S12",2533000);
+
+            Vehicle motorbikeClone = (Vehicle) motorbike3.clone();
+
+            motorbikeClone.setModelName("12", "ИЗМЕНЕННО");
+            motorbikeClone.setModelName("S12", "ИЗМЕНЕННО2");
+            motorbikeClone.setPriceOfModelName("ИЗМЕНЕННО",666);
+            motorbikeClone.setPriceOfModelName("ИЗМЕНЕННО2",999);
+
+            VehicleInfo.print(motorbike3);
+            VehicleInfo.print(motorbikeClone);
+
 
 
 
@@ -90,10 +109,10 @@ public class Main {
             Car
             Audi
             2
-            Corolla
-            15000.0
+            Mazda
+            12400.0
             Camry
-            25000.0
+            31122.0
             */
 
 

@@ -79,7 +79,7 @@ public class VehicleInfo {
                 String modelName = new String(modelNameBytes, StandardCharsets.UTF_8);
                 double price = dis.readDouble();
 
-                vehicle.addModel(price, modelName);
+                vehicle.addModel(modelName, price);
             }
             return vehicle;
 
@@ -131,7 +131,7 @@ public class VehicleInfo {
                 }
 
                 double price = Double.parseDouble(priceStr);
-                vehicle.addModel(price, modelName);
+                vehicle.addModel(modelName, price);
             }
             return vehicle;
         }

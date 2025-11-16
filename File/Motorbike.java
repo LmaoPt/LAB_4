@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Motorbike implements Vehicle{
+public class Motorbike implements Vehicle, Cloneable{
     private static final long serialVersionUID = 1L;
 
     private String mark;
@@ -24,7 +24,7 @@ public class Motorbike implements Vehicle{
         if(size_ > 0){
             try {
                 for (int i = 0; i < size_; i++) {
-                    addModel((i + 1) * 100000, "Model " + (i + 1));
+                    addModel("Model " + (i + 1),(i + 1) * 100000);
                 }
             } catch (DuplicateModelNameException e) {
                 e.printStackTrace();
@@ -88,19 +88,24 @@ public class Motorbike implements Vehicle{
     }
 
     public void setPriceOfModelName(String name, double price) throws NoSuchModelNameException {
-        if (price <= 0) {
-            throw new ModelPriceOutOfBoundsException("Цена должна быть больше 0!");
+        if(price <= 0.0f){
+            throw new ModelPriceOutOfBoundsException("Отрицательная цена!");
         }
-        Model p = head.next;
-        while (p != head) {
-            if (name.equals(p.name)) {
-                p.price = price;
-                lastModified = System.currentTimeMillis();
-                return;
+        Model current = head.next;
+        boolean modelFound = false;
+        while(current != head){
+            if(current.getName().equals(name)){
+                modelFound = true;
+                break;
             }
-            p = p.next;
+            current = current.next;
         }
-        throw new NoSuchModelNameException(name);
+        if(modelFound){
+            current.setPrice(price);
+        }
+        else{
+            throw new NoSuchModelNameException("Такой модели нет!");
+        }
     }
 
     public double[] getPrices() {
@@ -115,7 +120,7 @@ public class Motorbike implements Vehicle{
         return prices;
     }
 
-    public void addModel(double price, String name) throws DuplicateModelNameException {
+    public void addModel(String name, double price) throws DuplicateModelNameException {
         if (price <= 0) {
             throw new ModelPriceOutOfBoundsException("Цена должна быть больше 0!");
         }
@@ -196,7 +201,27 @@ public class Motorbike implements Vehicle{
         }
         return result;
     }
-    private class Model implements Serializable {
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        Motorbike motorbikeClon = (Motorbike) super.clone();
+        try {
+            Model current = head.next;
+            motorbikeClon.head = new Model();
+            motorbikeClon.head.next = motorbikeClon.head;
+            motorbikeClon.head.prev = motorbikeClon.head;
+            motorbikeClon.size = 0; //Если не обнулить, итоговое количество будет больше, чем оно есть по факту.
+
+            while (current != head) {
+                motorbikeClon.addModel(current.getName(), current.getPrice());
+                current = current.next;
+            }
+        }
+        catch (DuplicateModelNameException e) {
+            e.printStackTrace();
+        }
+        return motorbikeClon;
+    }
+    private class Model implements Serializable, Cloneable {
         private static final long serialVersionUID = 1L;
         String name = null;
         double price = Double.NaN;
@@ -204,9 +229,13 @@ public class Motorbike implements Vehicle{
         Model next = null;
 
         public Model() {}
-        public Model(String modelname, double price) {
-            this.name = modelname;
+        public Model(String name, double price) {
+            this.name = name;
             this.price = price;
         }
+        public String getName(){return name;}
+        public void setName(String name){this.name = name;}
+        public Double getPrice(){return price;}
+        public void setPrice(Double price){this.price = price;}
     }
 }
