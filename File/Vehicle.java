@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public interface Vehicle extends Serializable {
+public interface Vehicle extends Serializable, Cloneable {
     void setMark(String make);
     String getMark();
     String[] getNamesOfModels();
@@ -15,5 +15,4 @@ public interface Vehicle extends Serializable {
     boolean equals(Object obj);
     public int hashCode();
     Object clone() throws CloneNotSupportedException;
-
 }

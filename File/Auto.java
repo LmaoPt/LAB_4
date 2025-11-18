@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-public class Auto implements Vehicle, Cloneable {
+public class Auto implements Vehicle {
     private static final long serialVersionUID = 1L;
 
     private String mark;
@@ -115,7 +115,7 @@ public class Auto implements Vehicle, Cloneable {
             throw new NoSuchModelNameException(oldmodelname);
         }
     }
-
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
 
@@ -133,7 +133,7 @@ public class Auto implements Vehicle, Cloneable {
     @Override
     public boolean equals(Object obj){
         if(this == obj){ return true;}
-        else if(!(obj instanceof Vehicle)){return false;}
+        else if(!(obj instanceof Auto)){return false;}
         else{
             Auto auto = (Auto) obj;
             if(!(Objects.equals(this.getMark(), auto.getMark()))){return false;}
@@ -165,7 +165,7 @@ public class Auto implements Vehicle, Cloneable {
         return autoClone;
     }
 
-    private class Model implements Serializable, Cloneable {
+    private class Model implements Serializable {
         private static final long serialVersionUID = 1L;
         private String name;
         private double price;

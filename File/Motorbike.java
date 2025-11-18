@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Motorbike implements Vehicle, Cloneable{
+public class Motorbike implements Vehicle{
     private static final long serialVersionUID = 1L;
 
     private String mark;
@@ -209,7 +209,7 @@ public class Motorbike implements Vehicle, Cloneable{
             motorbikeClon.head = new Model();
             motorbikeClon.head.next = motorbikeClon.head;
             motorbikeClon.head.prev = motorbikeClon.head;
-            motorbikeClon.size = 0; //Если не обнулить, итоговое количество будет больше, чем оно есть по факту.
+            motorbikeClon.size = 0;
 
             while (current != head) {
                 motorbikeClon.addModel(current.getName(), current.getPrice());
