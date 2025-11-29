@@ -1,5 +1,7 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.lang.reflect.*;
+import java.util.Scanner;
 
 public class VehicleInfo {
 
@@ -13,6 +15,9 @@ public class VehicleInfo {
     }
 
     public static void print(Vehicle vehicle) {
+        String clssName = vehicle.getClass().getSimpleName();
+        String mark = vehicle.getMark();
+        System.out.println("Класс: " + clssName + " Марка: " + mark);
         String[] models = vehicle.getNamesOfModels();
         double[] prices = vehicle.getPrices();
         for (int i = 0; i < models.length; i++) {
@@ -65,7 +70,7 @@ public class VehicleInfo {
                 case "Auto":
                     vehicle = new Auto(make, 0);
                     break;
-                case "Bike":
+                case "Motorbike":
                     vehicle = new Motorbike(make, 0);
                     break;
                 default:
@@ -90,48 +95,52 @@ public class VehicleInfo {
 
     public static void writeVehicle(Vehicle vehicle, Writer out) {
         PrintWriter writer = new PrintWriter(out);
-        writer.println(vehicle.getClass().getSimpleName());
-        writer.println(vehicle.getMark());
-        writer.println(vehicle.getModelsLength());
+
+        writer.printf("Класс: %s%n", vehicle.getClass().getSimpleName());
+        writer.printf("Марка: %s%n", vehicle.getMark());
+        writer.printf("Количество моделей: %d%n", vehicle.getModelsLength());
 
         String[] models = vehicle.getNamesOfModels();
         double[] prices = vehicle.getPrices();
         for (int i = 0; i < models.length; i++) {
-            writer.println(models[i]);
-            writer.println(prices[i]);
+            writer.printf("Модель: %s%n",models[i]);
+            writer.printf("Цена: %.2f%n", prices[i]);
         }
         writer.flush();
     }
 
 
     public static Vehicle readVehicle(Reader in) throws IOException {
-        BufferedReader reader = new BufferedReader(in);
+        Scanner scanner = new Scanner(in);
         try {
-            String className = reader.readLine();
-            String make = reader.readLine();
-            int modelCount = Integer.parseInt(reader.readLine());
+            String className = scanner.nextLine().replace("Класс: ","");
+            String make = scanner.nextLine().replace("Марка: ", "");
+            int modelCount = Integer.parseInt(scanner.nextLine().replace("Количество моделей: ", ""));
 
             Vehicle vehicle;
             switch (className) {
-                case "Car":
+                case "Auto":
                     vehicle = new Auto(make, 0);
                     break;
-                case "Bike":
+                case "Motorbike":
                     vehicle = new Motorbike(make, 0);
+                    break;
+                case "Scooter":
+                    vehicle = new Scooter(make, 0);
+                    break;
+                case "Moped":
+                    vehicle = new Moped(make, 0);
+                    break;
+                case "Quadbike":
+                    vehicle = new Quadbike(make, 0);
                     break;
                 default:
                     throw new IOException("Неизвестный класс: " + className);
             }
             for (int i = 0; i < modelCount; i++) {
-                String modelName = reader.readLine();
-                String priceStr = reader.readLine();
-
-                if (modelName == null || priceStr == null) {
-                    throw new IOException("Неожиданный конец файла при чтении моделей");
-                }
-
-                double price = Double.parseDouble(priceStr);
-                vehicle.addModel(modelName, price);
+                String name = scanner.nextLine().replace("Модель: ", "");
+                double price = Double.parseDouble((scanner.nextLine().replace("Цена: ", "")).replace(",","."));
+                vehicle.addModel(name, price);
             }
             return vehicle;
         }
@@ -143,7 +152,6 @@ public class VehicleInfo {
         }
     }
 
-
     public static void serializeVehicle(Vehicle vehicle, String filename) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(vehicle);
@@ -154,5 +162,32 @@ public class VehicleInfo {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             return (Vehicle) ois.readObject();
         }
+    }
+    public static Vehicle createVehicle(Vehicle vehicle, String mark, int length){
+        Vehicle instance = null;
+        try {
+            Class<?> clss = vehicle.getClass();
+            Constructor constructor = clss.getDeclaredConstructor(String.class, int.class);
+            instance = (Vehicle) constructor.newInstance(mark,length);
+
+        }
+        catch(NoSuchMethodException e) {
+            return null;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return instance;
+    }
+    public static double getAveragePriceOfAllModels(Vehicle... vehicles){
+        double result = 0;
+        double count = 0;
+        for(int i = 0; i < vehicles.length; i++){
+            for(int j = 0; j < vehicles[i].getModelsLength(); j++){
+                result += vehicles[i].getPrices()[j];
+                count++;
+            }
+        }
+        return result / count;
     }
 }

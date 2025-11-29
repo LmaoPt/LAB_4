@@ -1,52 +1,48 @@
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
+import java.lang.reflect.*;
 
-class Student implements Cloneable{
-    public String name = "Vlad";
-    public int age = 19;
-    public Student(){}
-    public Student(String name, int age){
-        this.name = name;
-        this.age = age;
-    }
-    @Override
-    public String toString(){
-        return "Student: Name - " + name + " Age - " + age;
-    }
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj){ // проверка ссылки на себя же
-            return true;
-        }
-        if(!(obj instanceof Student)){ //Можно использовать instanсeof(разрешает подклассы)
-            return false;
-        }
-        Student student = (Student) obj; // Приведения типов, потому что equals должен принимать любой тип
-        return age == student.age && Objects.equals(name, student.name);
-    }
-    @Override
-    public Object clone() throws CloneNotSupportedException{
-        return super.clone();
-    }
-}
 
 public class Test {
+    public static void main(String[] args) throws NoSuchModelNameException, DuplicateModelNameException, IOException {
+        HashMap<Integer, String> passwordAndNames = new HashMap<>();
+        passwordAndNames.put(243431, "Дмитрий Семёнович Семга");
+        passwordAndNames.put(897345, "Пётр Иванович Колбаскин");
+        passwordAndNames.put(234329, "Игорь Антонович Голубцов");
+        passwordAndNames.put(765324, "Анастасия Владимировна Хач");
+        String a = passwordAndNames.get(897345);
+        System.out.println(passwordAndNames);
+        System.out.println(a);
 
-    public static void main(String[] args) {
-        Auto auto = new Auto("Audi", 10);
-        System.out.println(auto);
+        Vehicle vehicle = new Scooter("Audi", 10);
+        vehicle.setPriceOfModelName("Model 1", 2343);
+        vehicle.deleteModel("Model 2");
 
-        StringBuffer buf = new StringBuffer();
-        buf.append("Жопа");
-        buf.delete(1,3);
-        buf.insert(2, "Hello");
-        System.out.println(buf);
+        Vehicle vehicle2 = new Moped("Audi", 10);
+        vehicle2.setPriceOfModelName("Model 1", 32434);
+        vehicle2.setModelName("Model 10", "Model 24334");
+        vehicle2.deleteModel("Model 2");
 
-        Student student1 = new Student();
-        Student student2 = new Student("Artem", 123);
-        System.out.println(student1.toString());
-        System.out.println(student2.toString());
-        System.out.println(student1.toString());
+        VehicleInfo.print(vehicle2);
+        //System.out.println(vehicle.equals(vehicle2));
 
-        System.out.println(student1.equals(student2));
+        System.out.println(VehicleInfo.getAveragePriceOfAllModels(vehicle,vehicle2));
+
+        /*Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите число!");
+        int sss = scanner.nextInt();
+        System.out.println("Мне кажется ты ввёл: " + sss);
+        scanner.close();
+        System.out.printf("Hello world!");
+        System.out.printf("привет мир!");*/
+
+        Vehicle quadbike = new Quadbike("Mercedes",10);
+        Writer writer = new OutputStreamWriter(System.out);
+        VehicleInfo.writeVehicle(quadbike, writer);
+
+        Vehicle result = VehicleInfo.readVehicle(new InputStreamReader(System.in));
+        VehicleInfo.print(result);
+
+
     }
 }

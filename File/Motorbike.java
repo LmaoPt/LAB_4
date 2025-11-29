@@ -221,7 +221,7 @@ public class Motorbike implements Vehicle{
         }
         return motorbikeClon;
     }
-    private class Model implements Serializable, Cloneable {
+    private class Model{
         private static final long serialVersionUID = 1L;
         String name = null;
         double price = Double.NaN;

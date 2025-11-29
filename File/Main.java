@@ -1,40 +1,46 @@
 import java.io.*;
+import java.lang.reflect.Method;
 
 public class Main {
     public static void main(String[] args) {
+
         try {
-            Vehicle motorbike = new Motorbike("Audi", 0);
-            motorbike.addModel( "123",1532300);
-            motorbike.addModel("S12",2533000);
+            String className = args[0];
+            String methodName = args[1];
+            String name = args[2];
+            double price = Double.parseDouble(args[3]);
 
-            Vehicle motorbike1 = new Motorbike("Audi", 2);
-            motorbike1.addModel( "123",1532300);
-            motorbike1.addModel("S12",2533000);
-
-            Vehicle auto = new Auto("Mercedes", 2);
-            auto.addModel("Turbo-S", 1532300);
-            auto.addModel("B12", 2533000);
-
-            System.out.println(motorbike);
-            System.out.println(auto);
-            System.out.println("Значения равны? " + motorbike.equals(motorbike1));
-            System.out.println("Хеш-код: " + motorbike.hashCode());
-            System.out.println("Хеш-код: " + motorbike1.hashCode());
+            Class<?> clss = Class.forName(className);
+            Vehicle reflection = (Vehicle) clss.getDeclaredConstructor(String.class, int.class).newInstance("Audi", 3);
+            Method method = clss.getMethod(methodName, String.class, double.class);
 
 
-            Vehicle motorbike3 = new Motorbike("Audi", 0);
-            motorbike3.addModel( "12",1532300);
-            motorbike3.addModel( "S12",2533000);
+            reflection.addModel("F2",123);
+            reflection.addModel("F3",12356);
+            reflection.addModel("F234",12365);
+            reflection.deleteModel("Model 2");
+            reflection.setModelName("F3", "F666");
+            reflection.setPriceOfModelName("F234", 13231);
+            VehicleInfo.print(reflection);
+            System.out.println("------------");
 
-            Vehicle motorbikeClone = (Vehicle) motorbike3.clone();
+            method.invoke(reflection, name, price);
+            VehicleInfo.print(reflection);
 
-            motorbikeClone.setModelName("12", "ИЗМЕНЕННО");
-            motorbikeClone.setModelName("S12", "ИЗМЕНЕННО2");
-            motorbikeClone.setPriceOfModelName("ИЗМЕНЕННО",666);
-            motorbikeClone.setPriceOfModelName("ИЗМЕНЕННО2",999);
+            System.out.println("------------");
 
-            VehicleInfo.print(motorbike3);
-            VehicleInfo.print(motorbikeClone);
+            Vehicle i = VehicleInfo.createVehicle(reflection, "MM", 12);
+            VehicleInfo.print(i);
+
+            System.out.println("------------");
+
+
+            Writer writer = new OutputStreamWriter(System.out);
+            VehicleInfo.writeVehicle(i, writer);
+
+            Vehicle result = VehicleInfo.readVehicle(new InputStreamReader(System.in));
+            VehicleInfo.print(result);
+
 
 
 

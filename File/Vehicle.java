@@ -11,8 +11,9 @@ public interface Vehicle extends Serializable, Cloneable {
     void deleteModel(String name) throws NoSuchModelNameException;
     void setModelName(String oldName, String newName) throws NoSuchModelNameException, DuplicateModelNameException;
     int getModelsLength();
+
     String toString();
     boolean equals(Object obj);
-    public int hashCode();
+    int hashCode();
     Object clone() throws CloneNotSupportedException;
 }

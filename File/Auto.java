@@ -165,7 +165,7 @@ public class Auto implements Vehicle {
         return autoClone;
     }
 
-    private class Model implements Serializable {
+    private class Model{
         private static final long serialVersionUID = 1L;
         private String name;
         private double price;
