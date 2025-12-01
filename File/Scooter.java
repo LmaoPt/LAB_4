@@ -9,7 +9,8 @@ public class Scooter implements Vehicle{
     public Scooter(String mark, int count)
     {
         this.mark = mark;
-        if(count > 0) {try{
+        if(count > 0) {
+            try {
             for (int i = 0; i < count; i++) {
                     addModel("Model " + (i + 1), (i + 1) * 100000);
                 }
@@ -32,7 +33,12 @@ public class Scooter implements Vehicle{
 
     @Override
     public String[] getNamesOfModels() {
-        String[] names = models.keySet().toArray(new String[0]);
+        String[] names = new String[models.size()];
+        int i = 0;
+        for(String model : models.keySet()){
+            names[i] = model;
+            i++;
+        }
         return names;
     }
 

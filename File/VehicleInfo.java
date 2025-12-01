@@ -73,6 +73,15 @@ public class VehicleInfo {
                 case "Motorbike":
                     vehicle = new Motorbike(make, 0);
                     break;
+                case "Scooter":
+                    vehicle = new Scooter(make, 0);
+                    break;
+                case "Moped":
+                    vehicle = new Moped(make, 0);
+                    break;
+                case "Quadbike":
+                    vehicle = new Quadbike(make, 0);
+                    break;
                 default:
                     throw new IOException("Неизвестный класс: " + className);
             }

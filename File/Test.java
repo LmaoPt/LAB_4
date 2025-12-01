@@ -43,6 +43,6 @@ public class Test {
         Vehicle result = VehicleInfo.readVehicle(new InputStreamReader(System.in));
         VehicleInfo.print(result);
 
-
     }
 }
+
